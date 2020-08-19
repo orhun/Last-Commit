@@ -1,0 +1,51 @@
+{
+  "name": "last-commit",
+  "displayName": "Last Commit",
+  "description": "See the last git commit on the status bar",
+  "version": "1.0.0",
+  "publisher": "orhun",
+  "author": {
+    "name": "orhun",
+    "email": "orhunparmaksiz@gmail.com",
+    "url": "https://github.com/orhun"
+  },
+  "repository": "https://github.com/orhun/Last-Commit",
+  "license": "GPL-3.0-or-later",
+  "keywords": [
+    "git",
+    "commit",
+    "status bar",
+    "last commit",
+    "status",
+    "log"
+  ],
+  "icon": "images/icon.png",
+  "galleryBanner": {
+    "color": "#5e8b9a",
+    "theme": "dark"
+  },
+  "engines": {
+    "vscode": "^1.33.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./extension.js",
+  "scripts": {
+    "lint": "eslint .",
+    "pretest": "yarn run lint"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.33.0",
+    "@types/glob": "^7.1.3",
+    "@types/mocha": "^8.0.0",
+    "@types/node": "^14.0.27",
+    "eslint": "^7.6.0",
+    "glob": "^7.1.6",
+    "mocha": "^8.0.1",
+    "typescript": "^3.8.3"
+  }
+}
