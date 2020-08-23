@@ -1,6 +1,5 @@
 const vscode = require("vscode");
 const { execSync } = require("child_process");
-const { setTimeout } = require("timers");
 const { watch } = require("fs");
 
 /**
@@ -39,9 +38,7 @@ function activate(context) {
     gitLogItem.text = `$(git-commit) ${execGit("log --oneline -n 1")}`;
     gitLogItem.show();
     watch(`${execGit("rev-parse --show-toplevel")}/.git/logs/`, () => {
-      setTimeout(() => {
-        gitLogItem.text = `$(git-commit) ${execGit("log --oneline -n 1")}`;
-      }, 5000);
+      gitLogItem.text = `$(git-commit) ${execGit("log --oneline -n 1")}`;
     });
     context.subscriptions.push(gitLogItem);
   }
