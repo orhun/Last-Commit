@@ -27,7 +27,10 @@ function execGit(command) {
  * @param {vscode.ExtensionContext} context
  */
 function activate(context) {
-  if (execGit("rev-parse --is-inside-work-tree") === "true") {
+  if (
+    vscode.workspace.rootPath !== undefined &&
+    execGit("rev-parse --is-inside-work-tree") === "true"
+  ) {
     const gitLogItem = vscode.window.createStatusBarItem(
       vscode.StatusBarAlignment.Left,
       -1
