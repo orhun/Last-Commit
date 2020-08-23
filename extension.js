@@ -1,6 +1,7 @@
 const vscode = require("vscode");
 const { execSync } = require("child_process");
 const { setTimeout } = require("timers");
+const { watch } = require("fs");
 
 /**
  * Execute a git command.
@@ -37,15 +38,11 @@ function activate(context) {
     );
     gitLogItem.text = `$(git-commit) ${execGit("log --oneline -n 1")}`;
     gitLogItem.show();
-    vscode.workspace
-      .createFileSystemWatcher(
-        `${execGit("rev-parse --show-toplevel")}/.git/COMMIT_EDITMSG`
-      )
-      .onDidChange(() => {
-        setTimeout(() => {
-          gitLogItem.text = `$(git-commit) ${execGit("log --oneline -n 1")}`;
-        }, 5000);
-      });
+    watch(`${execGit("rev-parse --show-toplevel")}/.git/logs/`, () => {
+      setTimeout(() => {
+        gitLogItem.text = `$(git-commit) ${execGit("log --oneline -n 1")}`;
+      }, 5000);
+    });
     context.subscriptions.push(gitLogItem);
   }
 }
