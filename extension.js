@@ -1,34 +1,24 @@
 const vscode = require("vscode");
-const { exec } = require("child_process");
+const { execSync } = require("child_process");
 const { setTimeout } = require("timers");
 
 /**
- * Get the command that prints the last commit.
+ * Execute a git command.
  *
- * @return {string} command
+ * @param  {string} command
+ * @return {string} output
  */
-function getGitCommand() {
-  let command = `cd ${vscode.workspace.rootPath} && git log --oneline -n 1`;
+function execGit(command) {
+  let cmd = `cd ${vscode.workspace.rootPath} && git ${command}`;
   if (vscode.env.shell.includes(".exe")) {
-    command = `${vscode.workspace.rootPath.substring(0, 2)} && ${command}`;
+    cmd = `${vscode.workspace.rootPath.substring(0, 2)} && ${cmd}`;
   }
-  return command;
-}
-
-/**
- * Show the last commit on the given item.
- *
- * @param {vscode.StatusBarItem} item
- */
-function showLastCommit(item) {
-  exec(getGitCommand(), null, (error, stdout, stderr) => {
-    if (stdout) {
-      item.text = `$(git-commit) ${stdout}`;
-      item.show();
-    } else {
-      console.error(`${error} ${stderr}`);
-    }
-  });
+  try {
+    return execSync(cmd).toString().trim();
+  } catch (e) {
+    console.error(e);
+    return null;
+  }
 }
 
 /**
@@ -37,16 +27,21 @@ function showLastCommit(item) {
  * @param {vscode.ExtensionContext} context
  */
 function activate(context) {
-  if (vscode.workspace.rootPath !== undefined) {
+  if (execGit("rev-parse --is-inside-work-tree") === "true") {
     const gitLogItem = vscode.window.createStatusBarItem(
       vscode.StatusBarAlignment.Left,
       -1
     );
-    showLastCommit(gitLogItem);
+    gitLogItem.text = `$(git-commit) ${execGit("log --oneline -n 1")}`;
+    gitLogItem.show();
     vscode.workspace
-      .createFileSystemWatcher(`**/.git/COMMIT_EDITMSG`)
+      .createFileSystemWatcher(
+        `${execGit("rev-parse --show-toplevel")}/.git/COMMIT_EDITMSG`
+      )
       .onDidChange(() => {
-        setTimeout(showLastCommit.bind(null, gitLogItem), 5000);
+        setTimeout(() => {
+          gitLogItem.text = `$(git-commit) ${execGit("log --oneline -n 1")}`;
+        }, 5000);
       });
     context.subscriptions.push(gitLogItem);
   }
