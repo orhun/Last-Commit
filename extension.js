@@ -3,23 +3,32 @@ const { exec } = require("child_process");
 const { setTimeout } = require("timers");
 
 /**
+ * Get the command that prints the last commit.
+ *
+ * @return {string} command
+ */
+function getGitCommand() {
+  let command = `cd ${vscode.workspace.rootPath} && git log --oneline -n 1`;
+  if (vscode.env.shell.includes(".exe")) {
+    command = `${vscode.workspace.rootPath.substring(0, 2)} && ${command}`;
+  }
+  return command;
+}
+
+/**
  * Show the last commit on the given item.
  *
  * @param {vscode.StatusBarItem} item
  */
 function showLastCommit(item) {
-  exec(
-    `cd ${vscode.workspace.rootPath} && git log --oneline -n 1`,
-    null,
-    (error, stdout, stderr) => {
-      if (stdout) {
-        item.text = `$(git-commit) ${stdout}`;
-        item.show();
-      } else {
-        console.error(`${error} ${stderr}`);
-      }
+  exec(getGitCommand(), null, (error, stdout, stderr) => {
+    if (stdout) {
+      item.text = `$(git-commit) ${stdout}`;
+      item.show();
+    } else {
+      console.error(`${error} ${stderr}`);
     }
-  );
+  });
 }
 
 /**
