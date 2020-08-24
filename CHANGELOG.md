@@ -5,6 +5,8 @@ All notable changes to the "Last Commit" extension will be documented in this fi
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
 ## [Unreleased]
+
+## [1.1.0] - 2020-08-24
 ### Added
 - Run commands synchronously with execGit method
 
