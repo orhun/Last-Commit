@@ -15,7 +15,7 @@ Last Commit is a VSCode extension that focuses on the last git commit.
 
 * Shows the last commit on the status bar.
 
-![feature-1](https://raw.githubusercontent.com/orhun/Last-Commit/master/images/feature-1.jpg)
+![feature-1](https://raw.githubusercontent.com/orhun/Last-Commit/master/images/feature-1.gif)
 
 ## Requirements
 
