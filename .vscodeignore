@@ -5,4 +5,5 @@ vsc-extension-quickstart.md
 **/*.map
 **/.eslintrc.json
 **/images/icon_large.png
+**/images/feature-1.gif
 **/.github/**
